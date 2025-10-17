@@ -27,17 +27,12 @@ namespace Clientes.WcService
             _situacaoService = situacaoService;
         }
 
-        // 🔹 Lista todos os clientes já com nome da situação
         public async Task<List<ClienteModel>> ListarClientes()
         {
             var clientes = new List<ClienteModel>();
 
             using (var conn = new SqlConnection(_connectionString))
-            using (var cmd = new SqlCommand(@"
-                SELECT c.Id, c.Nome, c.Cpf, c.DataNascimento, c.Sexo, 
-                       c.IdSituacao, s.Nome AS NomeSituacao
-                FROM Clientes c
-                INNER JOIN SituacoesCliente s ON c.IdSituacao = s.Id", conn))
+            using (var cmd = new SqlCommand("sp_Cliente_List", conn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 await conn.OpenAsync();
@@ -63,19 +58,14 @@ namespace Clientes.WcService
             return clientes;
         }
 
-        // 🔹 Busca cliente específico já com nome da situação
         public async Task<ClienteModel> ObterCliente(int id)
         {
             ClienteModel cliente = null;
 
             using (var conn = new SqlConnection(_connectionString))
-            using (var cmd = new SqlCommand(@"
-                SELECT c.Id, c.Nome, c.Cpf, c.DataNascimento, c.Sexo, 
-                       c.IdSituacao, s.Nome AS NomeSituacao
-                FROM Clientes c
-                INNER JOIN SituacoesCliente s ON c.IdSituacao = s.Id
-                WHERE c.Id = @Id", conn))
+            using (var cmd = new SqlCommand("sp_Cliente_GetById", conn))
             {
+                cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Id", id);
 
                 await conn.OpenAsync();

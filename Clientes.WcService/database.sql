@@ -54,8 +54,10 @@ BEGIN
         c.Cpf,
         c.DataNascimento,
         c.Sexo,
-        c.IdSituacao
+        c.IdSituacao,
+        s.Nome AS NomeSituacao
     FROM dbo.Clientes c
+    LEFT JOIN dbo.SituacoesCliente s ON s.Id = c.IdSituacao
     ORDER BY c.Nome;
 END;
 GO
@@ -69,14 +71,16 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT 
+ SELECT 
         c.Id,
         c.Nome,
         c.Cpf,
         c.DataNascimento,
         c.Sexo,
-        c.IdSituacao
+        c.IdSituacao,
+        s.Nome AS NomeSituacao
     FROM dbo.Clientes c
+    LEFT JOIN dbo.SituacoesCliente s ON s.Id = c.IdSituacao
     WHERE c.Id = @Id;
 END;
 GO
