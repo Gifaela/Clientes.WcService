@@ -39,6 +39,7 @@ namespace Clientes.WcService
                 FROM Clientes c
                 INNER JOIN SituacoesCliente s ON c.IdSituacao = s.Id", conn))
             {
+                cmd.CommandType = CommandType.StoredProcedure;
                 await conn.OpenAsync();
 
                 using (var reader = await cmd.ExecuteReaderAsync())
